@@ -19,7 +19,7 @@ CONTACT_EMAIL = 'dave.diebold@gmail.com'
 CONTACT_TEL_DISPLAY = '087 997 3953'
 CONTACT_TEL_HREF = 'tel:+353879973953'
 SOCIAL = [  # TODO(launch): replace # with real profile URLs
-    ('Facebook', '#'), ('Instagram', '#'), ('X · @tDeviators', 'https://x.com/tDeviators'), ('SoundCloud', '#'),
+    ('Facebook', '#'), ('Instagram', '#'), ('X · @tDeviators', 'https://x.com/tDeviators'), ('SoundCloud', 'https://soundcloud.com/deebs1967'),
 ]
 YOUTUBE_LIVE_ID = ''  # TODO(launch): YouTube video id of "Live at The Grand Social" (from EPK link)
 
@@ -63,7 +63,7 @@ def head(title, desc, path, og_type='website'):
 {{"@context":"https://schema.org","@type":"MusicGroup","name":"The Deviators","url":"{BASE}/","genre":["Punk","Rock"],"foundingLocation":{{"@type":"Place","name":"Dublin, Ireland"}},"logo":"{BASE}/img/logo-white.png","image":"{BASE}/img/og-image.jpg","member":[{{"@type":"Person","name":"Bitzy"}},{{"@type":"Person","name":"Bren"}},{{"@type":"Person","name":"Andy"}}],"sameAs":["https://x.com/tDeviators"]}}
 </script>
 </head>
-<body data-events-endpoint="/api/events" data-events-fallback="/data/events.json">
+<body>
 <a class="skip-link" href="#main">Skip to content</a>
 '''
 
@@ -136,11 +136,13 @@ def shows_block(limit, heading='Upcoming shows', foot=True, note=''):
   <div class="wrap">
     <div class="shows__head">
       <h2 id="shows-h">{heading}</h2>
-      <div class="shows__source">{REFRESH}<span>Upcoming dates · tickets via Eventbrite</span></div>
+      <div class="shows__source">{REFRESH}<span>Tickets via Eventbrite</span></div>
     </div>
     <div class="shows__list" data-shows data-limit="{limit}" aria-live="polite">
-      <div class="shows__empty">Loading shows…</div>
+      <p class="shows__empty">Loading upcoming shows…</p>
     </div>
+    <p class="shows__updated" data-events-updated></p>
+    <p class="embed-link"><a href="https://www.eventbrite.ie/o/120962217576" target="_blank" rel="noopener">View all events on Eventbrite ↗</a></p>
     {note}
     {'<div class="shows__foot"><a class="link-u" href="/live/">All dates &amp; past shows →</a></div>' if foot else ''}
   </div>
@@ -181,17 +183,10 @@ home += f'''
     <div class="col-7 stack">
       <span class="label">Listen</span>
       <h2 id="listen-h">Creatures</h2>
-      <!-- When Creatures is cleared for public release, replace this block with the SoundCloud embed:
-           <div class="player player--embed"><iframe title="The Deviators — Creatures" src="https://w.soundcloud.com/player/?url=TRACK_URL&color=%238f1a3a&auto_play=false&show_user=false" loading="lazy"></iframe></div> -->
-      <div class="player" aria-label="Creatures — player placeholder">
-        <button class="player__play" type="button" aria-label="Play Creatures (not yet public)" disabled>{PLAY}</button>
-        <div class="player__body">
-          <div class="player__title"><span><strong>The Deviators — Creatures</strong></span><span class="muted">SoundCloud</span></div>
-          <div class="player__wave" aria-hidden="true"></div>
-          <div class="player__time"><span>0:00</span><span>[duration]</span></div>
-        </div>
+      <div class="player player--embed">
+        <iframe title="Creatures Mix 5 by Deebs1967 — SoundCloud player" width="100%" height="300" scrolling="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%3Atracks%3A2389452084%3Fsecret_token%3Ds-VtGsbjaWTqk&amp;color=%238f1a3a&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;show_teaser=true&amp;visual=true" loading="lazy"></iframe>
       </div>
-      <p class="muted" style="font-size:14px">Public stream goes live with the single. Promoters and press: request the private link from management.</p>
+      <p class="muted" style="font-size:14px"><a href="https://soundcloud.com/deebs1967" target="_blank" rel="noopener">Deebs1967</a> · <a href="https://soundcloud.com/deebs1967/creatures-mix-5-1/s-VtGsbjaWTqk" target="_blank" rel="noopener">Creatures Mix 5 on SoundCloud ↗</a></p>
     </div>
     <div class="col-5 panel" id="album">
       <div class="stack stack--sm">
@@ -341,7 +336,7 @@ about += f'''
     <div class="col-7 stack">
       <span class="label">About</span>
       <h1 id="about-h" style="font-size:clamp(48px,6.6vw,96px)">Three Dublin musicians.<br>New songs.</h1>
-      <p class="lede soft">The Deviators are Bitzy, Bren and Andy: three Dublin musicians with histories stretching back through the city’s punk scene, now making new original material together. The songs are short, melodic and high-energy — punk and guitar pop played with the urgency that comes from knowing exactly what a live room needs.</p>
+      <p class="lede soft">The Deviators are Bitzy, Bren and Andy: three Dublin musicians with histories stretching back through the city’s punk scene, now making new original material together. The songs are short, melodic and high-energy punk and guitar pop, played with the urgency that comes from knowing exactly what a live room needs.</p>
       <p class="lede soft">Their first album, <em>More Volume, Less Reverb</em>, produced by Stano, is nearly ready. There is plenty of history in the band, but they are not interested in recreating it.</p>
     </div>
     <div class="col-4 push-8 frame frame--3x4">{img('selfie', 'Bitzy, Andy and Bren grinning in a backstage selfie', '(max-width: 900px) 100vw, 33vw')}</div>
@@ -488,10 +483,10 @@ press += f'''
     <div class="col-4 stack stack--sm">
       <span class="label">Assets</span>
       <h2 id="assets-h" style="font-size:clamp(34px,3.3vw,48px)">Music, video, photos, logo, stage plot</h2>
-      <p class="muted" style="font-size:15px">Public links only. <em>Creatures</em> stays a private stream until cleared for release.</p>
+      <p class="muted" style="font-size:15px">Listen to <em>Creatures</em> on SoundCloud.</p>
     </div>
     <div class="col-7 push-5 linklist linklist--2col">
-      <a href="mailto:{CONTACT_EMAIL}?subject=Creatures%20private%20stream"><span>Listen · <em>Creatures</em></span><span class="muted">private · on request</span></a>
+      <a href="https://soundcloud.com/deebs1967/creatures-mix-5-1/s-VtGsbjaWTqk" target="_blank" rel="noopener"><span>Listen · <em>Creatures</em></span><span class="muted">SoundCloud ↗</span></a>
       <a href="{('https://www.youtube.com/watch?v=' + YOUTUBE_LIVE_ID) if YOUTUBE_LIVE_ID else '#'}" target="_blank" rel="noopener"><span>Watch · Live at The Grand Social</span><span class="muted">YouTube</span></a>
       <a href="/downloads/deviators-press-photos.zip"><span>Hi-res press photos</span><span class="muted">ZIP</span></a>
       <a href="/media/#logo"><span>Logo · light &amp; dark</span><span class="muted">PNG</span></a>
@@ -513,7 +508,7 @@ privacy = head('Privacy', 'Privacy notice for thedeviators.com.', '/privacy/') +
     <div class="col-7 stack">
       <span class="label">Privacy</span>
       <h1 style="font-size:clamp(48px,6.6vw,96px)">Privacy notice</h1>
-      <p class="soft">This site does not use cookies for tracking and does not run analytics by default. Fonts are loaded from Google Fonts, which may log your IP address. Videos are embedded only after you press play, using YouTube’s privacy-enhanced mode. Ticketing is handled by Eventbrite under its own privacy policy. If you email us, we keep your message only for as long as needed to reply.</p>
+      <p class="soft">This site displays event details refreshed daily from Eventbrite, with images loaded from Eventbrite, and embeds an audio player from SoundCloud. These services receive connection information, such as your IP address, when their content loads and may use cookies under their own privacy policies. Fonts are loaded from Google Fonts. YouTube videos are loaded only after you press play, using YouTube’s privacy-enhanced mode. Ticket purchases are handled by Eventbrite. If you email us, we keep your message only for as long as needed to reply.</p>
       <p class="soft">Contact: {CONTACT_NAME} · <a href="mailto:{CONTACT_EMAIL}" style="border-bottom:1px solid var(--muted)">{CONTACT_EMAIL}</a></p>
       <p class="muted" style="font-size:14px">[Review before launch — add analytics/cookie wording if analytics are enabled.]</p>
     </div>

@@ -1,0 +1,61 @@
+name: Publish website and refresh events
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '17 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check event parser
+        run: node --test tools/sync-eventbrite.test.cjs
+      - name: Refresh public Eventbrite listings
+        id: events
+        continue-on-error: true
+        run: node tools/sync-eventbrite.cjs
+      - name: Back up successful event snapshot
+        if: steps.events.outcome == 'success'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/data/events.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Refresh public Eventbrite events'
+            git push origin HEAD:main
+          fi
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: docs
+      - name: Deploy website
+        id: deployment
+        uses: actions/deploy-pages@v4
+      - name: Report refresh failure after deploying the saved snapshot
+        if: steps.events.outcome != 'success'
+        run: |
+          echo '::error::Eventbrite refresh failed. Website deployed with the last successful event snapshot. Inspect the refresh step.'
+          exit 1

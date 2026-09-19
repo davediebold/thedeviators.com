@@ -14,7 +14,7 @@ The entire project is tracked in this public repository, including original phot
 
 ## Publishing and backup
 
-GitHub Pages uses the `main` branch and `/docs` folder. Updates publish after a commit is pushed. Git does not automatically upload local edits: commit and push the whole project when changes are ready.
+The Pages workflow publishes only `/docs` from `main`. Updates publish after an approved commit is pushed. Git does not automatically upload local edits: commit and push the whole project when changes are ready. To activate this new workflow on the first deployment, change Settings → Pages → Source from "Deploy from a branch" to "GitHub Actions".
 
 ```powershell
 git add --all
@@ -26,7 +26,17 @@ The site is configured for the GitHub project URL above. No custom domain or DNS
 
 ## Events and existing content
 
-GitHub Pages serves static files, so upcoming shows read `docs/data/events.json` directly. Update that file and push to publish show changes. The original Eventbrite proxy is retained as source backup but does not run here. Netlify redirects and response headers also do not apply on Pages.
+Upcoming shows use compact cards on the homepage and Live page. `tools/sync-eventbrite.cjs` reads the public organiser page at https://www.eventbrite.ie/o/120962217576 and saves just its event titles, venue-local dates and times, venues, images, prices, and ticket links in `docs/data/events.json`. It does not require credentials or access private account data.
+
+The workflow refreshes once daily at 06:17 UTC, on deployment, and on manual runs. GitHub may delay scheduled jobs and may disable schedules in inactive public repositories after 60 days. Each successful snapshot is committed for backup and the site is deployed from the same run. A bot commit does not start another workflow. These event-only updates are automatic; other website edits still follow local review and explicit commit/push authorization.
+
+This reads Eventbrite's public page data, not a guaranteed API contract. If the page structure changes, events cannot be loaded, or the list becomes paginated, the refresh fails instead of overwriting the last successful snapshot. The workflow deploys the saved data and then reports the refresh failure. Cards display their last checked date, and a direct organiser link always remains available. Tickets are purchased on Eventbrite, where availability is current.
+
+Run `node tools/sync-eventbrite.cjs` to refresh locally, and `node --test tools/sync-eventbrite.test.cjs` to check the parser. The website filters out events once their local calendar day has passed.
+
+The homepage uses SoundCloud's hosted player for Creatures Mix 5, with the private sharing token supplied by the owner. SoundCloud provides the audio and player details live. The track must remain available with embedding enabled; the supplied sharing link is visible in the website source when published.
+
+The original Eventbrite server proxy is retained for backup but is not used. Netlify redirects and response headers do not apply on Pages.
 
 Existing content placeholders and unfinished social/ticket links are retained; see `site-build/docs/CONTENT.md` for the original content checklist.
 

@@ -1,15 +1,19 @@
 {
-  "_comment": "Fallback / local-dev shows list. In production the site reads /data/events.json (Eventbrite). Edit this file only if you are not using Eventbrite. Dates are local Dublin time.",
+  "source": "https://www.eventbrite.ie/o/120962217576",
+  "fetched_at": "2026-09-19T14:39:10.498Z",
+  "refresh_interval": "daily",
   "events": [
     {
-      "title": "The Deviators — Tokyo single launch + special guests Amadán",
+      "id": "1999410733326",
+      "title": "The Deviators Digital Single Launch",
       "start_local": "2026-11-01T16:30:00",
-      "doors": "4.30pm",
-      "venue_name": "The Grand Social Ballroom",
-      "city": "Dublin",
-      "price": "€15",
-      "image": "/thedeviators.com/img/tokyo-poster-800.jpg",
-      "url": "https://www.eventbrite.ie/",
+      "timezone": "Europe/Dublin",
+      "hide_start_date": false,
+      "venue_name": "The Grand Social, Ballroom",
+      "city": "Dublin 1",
+      "price": "From €17.07",
+      "image": "https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F1192402357%2F2991057314192%2F1%2Foriginal.20260901-184257?crop=focalpoint&fit=crop&h=230&w=460&auto=format%2Ccompress&q=75&sharp=10&fp-x=0.498&fp-y=0.162&s=1d7daf9ca8443b2083e03e04c8e4f520",
+      "url": "https://www.eventbrite.ie/e/the-deviators-digital-single-launch-tickets-1999410733326",
       "sold_out": false
     }
   ]

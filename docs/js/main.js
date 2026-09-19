@@ -1,6 +1,6 @@
 /* The Deviators — site JS
    1. Mobile nav toggle
-   2. Upcoming shows feed (Eventbrite via /data/events.json, falls back to /data/events.json)
+   2. Upcoming shows from the daily Eventbrite snapshot
    3. Video poster → YouTube embed on click
    No dependencies. */
 
@@ -25,106 +25,84 @@
     });
   }
 
-  /* ---------- 2. Shows feed ---------- */
+  /* ---------- 2. Eventbrite cards ---------- */
   var feeds = document.querySelectorAll('[data-shows]');
-  if (feeds.length) {
-    var endpoint = document.body.getAttribute('data-events-endpoint') || '/thedeviators.com/data/events.json';
-    var fallback = document.body.getAttribute('data-events-fallback') || '/thedeviators.com/data/events.json';
-
-    fetchJSON(endpoint)
-      .catch(function () { return fetchJSON(fallback); })
-      .then(function (data) {
-        var events = normalise(data);
-        feeds.forEach(function (el) { renderShows(el, events); });
+  var siteScript = document.currentScript;
+  if (feeds.length && siteScript) {
+    var eventsUrl = new URL('../data/events.json', siteScript.src);
+    fetch(eventsUrl, {cache: 'no-cache'})
+      .then(function (response) {
+        if (!response.ok) throw new Error('Events unavailable');
+        return response.json();
       })
-      .catch(function () {
-        feeds.forEach(function (el) { renderShows(el, []); });
+      .then(function (data) {
+        if (!Array.isArray(data.events)) throw new Error('Invalid events');
+        var events = data.events.filter(function (event) {
+          var today = new Intl.DateTimeFormat('sv-SE', {timeZone:event.timezone || 'Europe/Dublin'}).format(new Date());
+          return event.start_local && event.start_local.slice(0,10) >= today;
+        });
+        feeds.forEach(function (feed) {
+          feed.replaceChildren();
+          var limit = Number(feed.dataset.limit) || events.length;
+          if (!events.length) feed.appendChild(element('p', 'shows__empty', 'No upcoming shows announced. Check Eventbrite for the latest dates.'));
+          events.slice(0, limit).forEach(function (event) { feed.appendChild(eventCard(event)); });
+        });
+        document.querySelectorAll('[data-events-updated]').forEach(function (label) {
+          var fetched = new Date(data.fetched_at);
+          label.textContent = Number.isNaN(fetched.getTime()) ? '' : 'Eventbrite · checked ' + fetched.toLocaleDateString('en-IE', {day:'numeric',month:'short',year:'numeric',timeZone:'Europe/Dublin'});
+        });
+      }).catch(function () {
+        feeds.forEach(function (feed) {
+          feed.replaceChildren(element('p', 'shows__empty', 'Show details are temporarily unavailable. View all events on Eventbrite below.'));
+        });
       });
   }
 
-  function fetchJSON(url) {
-    return fetch(url, { headers: { Accept: 'application/json' } }).then(function (r) {
-      if (!r.ok) throw new Error(r.status);
-      return r.json();
-    });
+  function element(tag, className, text) {
+    var node = document.createElement(tag);
+    node.className = className;
+    if (text !== undefined) node.textContent = text;
+    return node;
   }
 
-  /* Accepts either our own shape ({events:[...]}) or a raw Eventbrite
-     /organizations/{id}/events response, and returns a flat sorted list. */
-  function normalise(data) {
-    var list = (data && data.events) || [];
-    var now = Date.now();
-    return list.map(function (ev) {
-      var start = ev.start_local || (ev.start && (ev.start.local || ev.start.utc)) || ev.start;
-      var venue = ev.venue_name || (ev.venue && ev.venue.name) || '';
-      var city = ev.city || (ev.venue && ev.venue.address && ev.venue.address.city) || '';
-      var name = ev.title || (ev.name && (ev.name.text || ev.name)) || '';
-      var summary = ev.summary || ev.description_short || '';
-      var img = ev.image || (ev.logo && (ev.logo.original && ev.logo.original.url || ev.logo.url)) || '';
-      var price = ev.price || priceFrom(ev);
-      var doors = ev.doors || '';
-      return {
-        start: new Date(start),
-        name: name,
-        venue: venue,
-        city: city,
-        summary: summary,
-        image: img,
-        price: price,
-        doors: doors,
-        url: ev.url || '#',
-        soldOut: !!(ev.sold_out || (ev.ticket_availability && ev.ticket_availability.is_sold_out))
-      };
-    }).filter(function (e) {
-      return !isNaN(e.start) && e.start.getTime() > now - 6 * 3600 * 1000; // keep today's show until 6h after start
-    }).sort(function (a, b) { return a.start - b.start; });
-  }
-
-  function priceFrom(ev) {
-    var ta = ev.ticket_availability;
-    if (ta && ta.minimum_ticket_price && ta.minimum_ticket_price.display) return ta.minimum_ticket_price.display;
-    if (ev.is_free) return 'Free';
-    return '';
-  }
-
-  var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  var DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
-  function renderShows(el, events) {
-    var limit = parseInt(el.getAttribute('data-limit') || '0', 10);
-    var shown = limit ? events.slice(0, limit) : events;
-    el.innerHTML = '';
-    if (!shown.length) {
-      var empty = document.createElement('div');
-      empty.className = 'shows__empty';
-      empty.innerHTML = 'No shows announced right now — <a href="/thedeviators.com/#book">book the band</a> or follow us for the next date.';
-      el.appendChild(empty);
-      return;
+  function eventCard(event) {
+    var row = element('article', 'show');
+    var date = element('div', 'show__date');
+    // Use the venue's calendar date, without shifting it to the visitor's timezone.
+    var day = new Date(event.start_local.slice(0,10) + 'T12:00:00Z');
+    if (!event.hide_start_date) {
+      date.appendChild(element('div', 'show__day', event.start_local.slice(8,10)));
+      var month = element('div', 'show__mon');
+      month.appendChild(element('span', '', day.toLocaleDateString('en-IE',{month:'short',timeZone:'UTC'})));
+      month.appendChild(element('span', '', day.toLocaleDateString('en-IE',{weekday:'short',timeZone:'UTC'}) + ' · ' + event.start_local.slice(0,4)));
+      date.appendChild(month);
+    } else date.textContent = 'Date on Eventbrite';
+    row.appendChild(date);
+    var picture = element('div', 'show__img');
+    if (event.image && /^https:\/\//.test(event.image)) {
+      var image = document.createElement('img');
+      image.src = event.image;
+      image.alt = '';
+      image.loading = 'lazy';
+      picture.appendChild(image);
     }
-    shown.forEach(function (ev) {
-      var d = ev.start;
-      var day = String(d.getDate()).padStart(2, '0');
-      var mon = MONTHS[d.getMonth()];
-      var dow = DAYS[d.getDay()];
-      var yr = d.getFullYear();
-      var time = ev.doors ? ('Doors ' + ev.doors) : d.toLocaleTimeString('en-IE', { hour: 'numeric', minute: '2-digit' }).replace(':00', '').toLowerCase();
-      var meta = [ev.venue + (ev.city ? ', ' + ev.city : ''), time, ev.price].filter(Boolean).join(' · ');
-
-      var row = document.createElement('article');
-      row.className = 'show';
-      row.innerHTML =
-        '<div class="show__date"><div class="show__day">' + day + '</div><div class="show__mon"><span>' + mon + '</span><span>' + dow + ' · ' + yr + '</span></div></div>' +
-        (ev.image ? '<div class="show__img"><img src="' + esc(ev.image) + '" alt="" loading="lazy"></div>' : '<div class="show__img" aria-hidden="true"></div>') +
-        '<div class="show__body"><div class="show__title">' + esc(ev.name) + '</div><div class="show__meta">' + esc(meta) + '</div></div>' +
-        '<div class="show__cta"><a class="btn btn--dark" href="' + esc(ev.url) + '" target="_blank" rel="noopener">' + (ev.soldOut ? 'Sold out' : 'Tickets →') + '</a></div>';
-      el.appendChild(row);
-    });
-  }
-
-  function esc(s) {
-    return String(s).replace(/[&<>"']/g, function (c) {
-      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
-    });
+    row.appendChild(picture);
+    var body = element('div', 'show__body');
+    body.appendChild(element('div', 'show__title', event.title));
+    var time = event.hide_start_date ? '' : event.start_local.slice(11,16);
+    body.appendChild(element('div', 'show__meta', [event.venue_name, event.city, time, event.price].filter(Boolean).join(' · ')));
+    row.appendChild(body);
+    var cta = element('div', 'show__cta');
+    var link = element('a', 'btn btn--dark', event.sold_out ? 'Sold out · details ↗' : 'Tickets ↗');
+    var url;
+    try { url = new URL(event.url); } catch (_) { url = null; }
+    link.href = url && url.protocol === 'https:' && /(^|\.)eventbrite\.(ie|com)$/.test(url.hostname) ? url.href : 'https://www.eventbrite.ie/o/120962217576';
+    link.target = '_blank';
+    link.rel = 'noopener';
+    link.setAttribute('aria-label', (event.sold_out ? 'Sold out: ' : 'Tickets for ') + event.title + ' on Eventbrite');
+    cta.appendChild(link);
+    row.appendChild(cta);
+    return row;
   }
 
   /* ---------- 3. Video embed on demand (no autoplay, no third-party load until clicked) ---------- */
