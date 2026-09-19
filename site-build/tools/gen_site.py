@@ -125,7 +125,7 @@ def write(path, html):
     full = os.path.join(SITE, path)
     os.makedirs(os.path.dirname(full), exist_ok=True)
     html = html.replace('/api/events', '/data/events.json')
-    html = re.sub(r'''(?<=["'])/(?!/)''', BASE_PATH + '/', html)
+    html = re.sub(r'''(?<=["'])/(?![/>])''', BASE_PATH + '/', html)
     html = html.replace(', /img/', ', ' + BASE_PATH + '/img/')
     with open(full, 'w', encoding='utf-8') as f:
         f.write(html)
@@ -136,7 +136,7 @@ def shows_block(limit, heading='Upcoming shows', foot=True, note=''):
   <div class="wrap">
     <div class="shows__head">
       <h2 id="shows-h">{heading}</h2>
-      <div class="shows__source">{REFRESH}<span>Live from Eventbrite · updates automatically</span></div>
+      <div class="shows__source">{REFRESH}<span>Upcoming dates · tickets via Eventbrite</span></div>
     </div>
     <div class="shows__list" data-shows data-limit="{limit}" aria-live="polite">
       <div class="shows__empty">Loading shows…</div>
