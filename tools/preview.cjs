@@ -8,9 +8,8 @@ http.createServer((req, res) => {
   let pathname;
   try { pathname = decodeURIComponent(new URL(req.url, 'http://localhost').pathname); }
   catch { res.writeHead(400).end(); return; }
-  if (pathname === '/' || pathname === base.slice(0, -1)) { res.writeHead(302, {Location:base}).end(); return; }
-  if (!pathname.startsWith(base)) { res.writeHead(404).end(); return; }
-  let file = path.resolve(root, pathname.slice(base.length));
+  if (pathname === base.slice(0, -1)) { res.writeHead(302, {Location:base}).end(); return; }
+  let file = path.resolve(root, pathname.startsWith(base) ? pathname.slice(base.length) : pathname.slice(1));
   if (file !== root && !file.startsWith(root + path.sep)) { res.writeHead(403).end(); return; }
   if (fs.existsSync(file) && fs.statSync(file).isDirectory()) {
     if (!pathname.endsWith('/')) { res.writeHead(302, {Location:pathname + '/'}).end(); return; }

@@ -1,6 +1,6 @@
 # The Deviators website and complete project backup
 
-Website: https://davediebold.github.io/thedeviators.com/
+Website: https://thedeviators.com/
 
 The entire project is tracked in this public repository, including original photographs, documents, notes, and the original build ZIP. Only `docs/` is published by GitHub Pages.
 
@@ -22,7 +22,7 @@ git commit -m "Update website and project backup"
 git push origin main
 ```
 
-The site is configured for the GitHub project URL above. No custom domain or DNS changes have been made. Links and metadata must be updated if a custom domain is configured later.
+The site is configured for the custom domain `thedeviators.com`, already set in GitHub Pages. Links and metadata use that domain. The existing `docs/CNAME` is retained.
 
 ## Events and existing content
 

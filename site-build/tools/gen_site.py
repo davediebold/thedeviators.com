@@ -9,8 +9,8 @@ so it stays identical across pages.
 import os, datetime, re
 
 SITE = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'docs')
-BASE = 'https://davediebold.github.io/thedeviators.com'
-BASE_PATH = '/thedeviators.com'
+BASE = 'https://thedeviators.com'
+BASE_PATH = ''
 YEAR = datetime.date.today().year
 
 # ---------- Shared content ----------
