@@ -4,17 +4,28 @@ Website: https://thedeviators.com/
 
 The entire project is tracked in this public repository, including original photographs, documents, notes, and the original build ZIP. Only `docs/` is published by GitHub Pages.
 
+Agent instructions are in `AGENTS.md` at this folder's root: preview and test changes in the ChatGPT/Codex browser on localhost first, then commit and push only when the user asks to publish.
+
 ## Layout
 
 - `docs/`: published HTML, CSS, JavaScript, optimized images, downloads, and events data.
-- `site-build/tools/gen_site.py`: optional page generator, updated to write to `docs/`.
-- `site-build/docs/`: original design, content, and development documentation.
-- `site-build/netlify/` and `site-build/netlify.toml`: preserved original Netlify implementation; not used on GitHub Pages.
-- Remaining root files and photo folders: original project assets and backup material.
+- `tools/`: local preview server, daily Eventbrite importer, and importer tests.
+- `.github/workflows/`: production deployment and daily event-refresh workflow.
+- `source-assets/photos/`: original photos, artwork, and logos; photographer collections retain their names.
+- `source-assets/documents/`: original EPK and stage-layout document.
+- `project-notes/`: correspondence, launch details, asset provenance, and the current content checklist.
+- `archive/`: historical build documentation, old generator and Netlify implementation, original ZIP, and initial planning.
+- `AGENTS.md`: instructions for future agents; this README is the current project guide.
+
+## Editing
+
+Edit the published HTML, CSS, and JavaScript directly in `docs/`. These files are the source of truth; no build step is required. Shared navigation/footer changes must be applied to all relevant HTML pages and checked locally. The former generator is archived and must not be used to overwrite the current pages.
+
+The `docs/` name is retained for the publishing folder; it is the website, not project documentation. Original assets are kept separately from optimized website images and public downloads. Keep both copies where appropriate: the originals are backups and the published copies serve the website.
 
 ## Publishing and backup
 
-The Pages workflow publishes only `/docs` from `main`. Updates publish after an approved commit is pushed. Git does not automatically upload local edits: commit and push the whole project when changes are ready. To activate this new workflow on the first deployment, change Settings → Pages → Source from "Deploy from a branch" to "GitHub Actions".
+The active Pages workflow publishes only `/docs` from `main`. GitHub Pages is already configured to use GitHub Actions. Updates publish after an approved commit is pushed. Git does not automatically upload local edits: commit and push the reviewed changes when the user asks to publish.
 
 ```powershell
 git add --all
@@ -38,8 +49,8 @@ The homepage uses SoundCloud's hosted player for Creatures Mix 5, with the priva
 
 The original Eventbrite server proxy is retained for backup but is not used. Netlify redirects and response headers do not apply on Pages.
 
-Existing content placeholders and unfinished social/ticket links are retained; see `site-build/docs/CONTENT.md` for the original content checklist.
+Remaining content work is listed in `project-notes/CONTENT-CHECKLIST.md`. Archived checklists describe the original build and are not current deployment instructions.
 
 ## Preview
 
-Run `node tools/preview.cjs` and open http://localhost:8000/thedeviators.com/. Review website changes locally before authorizing a commit and push; pushing deploys to production. Opening HTML directly from disk will not resolve the site paths correctly.
+Run `node tools/preview.cjs` and open http://localhost:8000/ in the ChatGPT/Codex in-app browser. Test affected pages and interactions locally and leave the preview available for review. The older http://localhost:8000/thedeviators.com/ alias also works. Commit and push only when the user requests publication; pushing deploys to production. Opening HTML directly from disk will not resolve the site paths correctly.
