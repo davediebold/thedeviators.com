@@ -45,7 +45,7 @@ This reads Eventbrite's public page data, not a guaranteed API contract. If the 
 
 Run `node tools/sync-eventbrite.cjs` to refresh locally, and `node --test tools/sync-eventbrite.test.cjs` to check the parser. The website filters out events once their local calendar day has passed.
 
-The homepage uses SoundCloud's hosted player for Creatures Mix 5, with the private sharing token supplied by the owner. SoundCloud provides the audio and player details live. The track must remain available with embedding enabled; the supplied sharing link is visible in the website source when published.
+The homepage uses SoundCloud's hosted player for Tokyo, with the private sharing token supplied by the owner. SoundCloud provides the audio and player details live. The track must remain available with embedding enabled; the supplied sharing link is visible in the website source when published.
 
 The original Eventbrite server proxy is retained for backup but is not used. Netlify redirects and response headers do not apply on Pages.
 

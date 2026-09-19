@@ -269,7 +269,7 @@ em { font-style: italic; }
 .member .grid { align-items: center; }
 .member .frame { aspect-ratio: 5 / 4; }
 .book-card { display: flex; align-items: center; gap: 16px; padding: 14px 16px; border: 1px solid var(--line); align-self: flex-start; }
-.book-card__cover { width: 40px; height: 54px; background: var(--line); flex-shrink: 0; }
+.book-card__cover { width: 64px; height: auto; flex-shrink: 0; }
 .book-card strong { font-size: 15px; }
 .book-card small { display: block; font-size: 13px; color: var(--muted); }
 .book-card small a { border-bottom: 1px solid var(--muted); }
@@ -303,7 +303,12 @@ em { font-style: italic; }
 /* ---------- 14. Press ---------- */
 .tags { display: flex; flex-wrap: wrap; gap: 10px; }
 .tags span { display: inline-flex; align-items: center; min-height: 40px; padding: 0 16px; border: 1px solid var(--line-2); font-size: 15px; color: var(--fg-2); }
+.past-bands { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; margin: 4px 0 0; padding: 0; list-style: none; border-top: 1px solid var(--line); }
+.past-bands li { padding: 13px 16px 13px 0; border-bottom: 1px solid var(--line); color: var(--fg-2); font-size: 15px; }
+@media (max-width: 900px) { .past-bands { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .past-bands { grid-template-columns: 1fr; } }
 .quotes3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gap); }
+.quotes2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 @media (max-width: 900px) { .quotes3 { grid-template-columns: 1fr; } }
 
 /* ---------- 15. Utilities ---------- */

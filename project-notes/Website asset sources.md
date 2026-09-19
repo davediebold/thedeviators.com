@@ -1,5 +1,11 @@
 # Website asset sources
 
+## Bitzy book cover
+
+Downloaded 19 September 2026 from the owner-supplied [Bandcamp book listing](https://rotatorvinyl.bandcamp.com/merch/bitzy-past-the-point-of-rescue-2nd-print-run).
+Image source: https://f4.bcbits.com/img/0042451483_10.jpg
+Original preserved at `source-assets/books/bitzy-past-the-point-of-rescue.jpg`; website copy at `docs/img/bitzy-past-the-point-of-rescue.jpg`.
+
 Downloaded 19 September 2026.
 
 - deviators logo.jpg — https://mail.google.com/mail/u/?authuser=dave.diebold%40gmail.com#all/1a05db04867db337
@@ -17,4 +23,3 @@ Full collection: https://drive.google.com/drive/folders/1zKCaB7gmkiNZi_XKCNw8gsH
 - Deviators-83.jpg — https://drive.google.com/file/d/1LDJt0hQ5PLILD-uQQviHSR3v_6G_KFnz/view?usp=drivesdk
 
 The May 31 poster is for a past show. The EPK is a draft dated August 2026. Website email notes and single-launch details are saved separately. Existing local photographs were preserved.
-

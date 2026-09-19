@@ -44,16 +44,16 @@
         feeds.forEach(function (feed) {
           feed.replaceChildren();
           var limit = Number(feed.dataset.limit) || events.length;
-          if (!events.length) feed.appendChild(element('p', 'shows__empty', 'No upcoming shows announced. Check Eventbrite for the latest dates.'));
+          if (!events.length) feed.appendChild(element('p', 'shows__empty', 'No upcoming shows announced.'));
           events.slice(0, limit).forEach(function (event) { feed.appendChild(eventCard(event)); });
         });
         document.querySelectorAll('[data-events-updated]').forEach(function (label) {
           var fetched = new Date(data.fetched_at);
-          label.textContent = Number.isNaN(fetched.getTime()) ? '' : 'Eventbrite · checked ' + fetched.toLocaleDateString('en-IE', {day:'numeric',month:'short',year:'numeric',timeZone:'Europe/Dublin'});
+          label.textContent = Number.isNaN(fetched.getTime()) ? '' : 'Updated ' + fetched.toLocaleDateString('en-IE', {day:'numeric',month:'short',year:'numeric',timeZone:'Europe/Dublin'});
         });
       }).catch(function () {
         feeds.forEach(function (feed) {
-          feed.replaceChildren(element('p', 'shows__empty', 'Show details are temporarily unavailable. View all events on Eventbrite below.'));
+          feed.replaceChildren(element('p', 'shows__empty', 'Show details are temporarily unavailable.'));
         });
       });
   }
@@ -76,7 +76,7 @@
       month.appendChild(element('span', '', day.toLocaleDateString('en-IE',{month:'short',timeZone:'UTC'})));
       month.appendChild(element('span', '', day.toLocaleDateString('en-IE',{weekday:'short',timeZone:'UTC'}) + ' · ' + event.start_local.slice(0,4)));
       date.appendChild(month);
-    } else date.textContent = 'Date on Eventbrite';
+    } else date.textContent = 'Date to be announced';
     row.appendChild(date);
     var picture = element('div', 'show__img');
     if (event.image && /^https:\/\//.test(event.image)) {
