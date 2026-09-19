@@ -1,0 +1,16 @@
+{
+  "_comment": "Fallback / local-dev shows list. In production the site reads /data/events.json (Eventbrite). Edit this file only if you are not using Eventbrite. Dates are local Dublin time.",
+  "events": [
+    {
+      "title": "The Deviators — Tokyo single launch + special guests Amadán",
+      "start_local": "2026-11-01T16:30:00",
+      "doors": "4.30pm",
+      "venue_name": "The Grand Social Ballroom",
+      "city": "Dublin",
+      "price": "€15",
+      "image": "/thedeviators.com/img/tokyo-poster-800.jpg",
+      "url": "https://www.eventbrite.ie/",
+      "sold_out": false
+    }
+  ]
+}

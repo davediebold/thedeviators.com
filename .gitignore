@@ -1,0 +1,5 @@
+# Machine-generated metadata only. Original project assets are intentionally tracked.
+.DS_Store
+Thumbs.db
+__pycache__/
+*.pyc

@@ -1,0 +1,53 @@
+# Netlify configuration — see docs/DEVELOPMENT.md
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+# Pretty URLs + API alias
+[[redirects]]
+  from = "/api/events"
+  to = "/.netlify/functions/events"
+  status = 200
+
+# Old GoDaddy URLs → new pages (301). Adjust the "from" paths to match the
+# live site's actual slugs before launch (docs/LAUNCH-CHECKLIST.md).
+[[redirects]]
+  from = "/music"
+  to = "/#listen"
+  status = 301
+[[redirects]]
+  from = "/meet-the-band"
+  to = "/about"
+  status = 301
+[[redirects]]
+  from = "/gallery"
+  to = "/media"
+  status = 301
+[[redirects]]
+  from = "/get-in-touch"
+  to = "/#book"
+  status = 301
+[[redirects]]
+  from = "/live-tgs-31st-may-2026"
+  to = "/live"
+  status = 301
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+[[headers]]
+  for = "/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+[[headers]]
+  for = "/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
