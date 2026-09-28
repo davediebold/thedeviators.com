@@ -120,4 +120,22 @@
       box.appendChild(iframe);
     });
   });
+
+  /* ---------- 4. SoundCloud player on demand (show the band photo until played) ---------- */
+  document.querySelectorAll('.player[data-soundcloud-player]').forEach(function (box) {
+    var source = box.getAttribute('data-soundcloud-player');
+    var btn = box.querySelector('.player-preview__play');
+    if (!source || !btn) return;
+    btn.addEventListener('click', function () {
+      var url;
+      try { url = new URL(source); } catch (_) { return; }
+      if (url.protocol !== 'https:' || url.hostname !== 'w.soundcloud.com') return;
+      url.searchParams.set('auto_play', 'true');
+      var iframe = document.createElement('iframe');
+      iframe.src = url.href;
+      iframe.title = 'Creatures_Edit SoundCloud player';
+      iframe.allow = 'autoplay; encrypted-media';
+      box.appendChild(iframe);
+    }, {once:true});
+  });
 })();

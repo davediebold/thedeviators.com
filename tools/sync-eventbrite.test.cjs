@@ -13,6 +13,10 @@ test('extracts public listing fields including actual ticket price and venue tim
   assert.equal(result.venue_name, 'Venue');
   assert.equal(result.url, event.url);
 });
+test('uses the advertised base price for the digital single launch', () => {
+  const [result] = parseEvents(page({upcomingEvents:[{...event,id:'1999410733326'}]}));
+  assert.equal(result.price, 'From €15');
+});
 test('accepts a genuine empty calendar', () => assert.deepEqual(parseEvents(page({upcomingEvents:[],upcomingEventsTotal:0})), []));
 test('refuses errors, schema changes, incomplete lists, and wrong organisers', () => {
   for (const data of [{upcomingEventsFailed:true},{hasMoreUpcoming:true},{upcomingEventsTotal:2},{organizer:{id:'wrong'}}]) assert.throws(() => parseEvents(page(data)));

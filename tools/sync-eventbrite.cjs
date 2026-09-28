@@ -4,6 +4,9 @@ const path = require('node:path');
 const ORGANIZER = '120962217576';
 const SOURCE = `https://www.eventbrite.ie/o/${ORGANIZER}`;
 const OUTPUT = path.resolve(__dirname, '../docs/data/events.json');
+const PRICE_OVERRIDES = new Map([
+  ['1999410733326', 'From €15']
+]);
 
 function parseEvents(html) {
   const match = html.match(/<script\b[^>]*\bid="__NEXT_DATA__"[^>]*>([\s\S]*?)<\/script>/i);
@@ -28,6 +31,7 @@ function parseEvents(html) {
     else if (amount && Number.isFinite(Number(amount.major_value)) && amount.currency) {
       price = 'From ' + new Intl.NumberFormat('en-IE', {style:'currency', currency:amount.currency}).format(Number(amount.major_value));
     }
+    price = PRICE_OVERRIDES.get(String(e.id)) || price;
     return {
       id: String(e.id), title: e.name, start_local: `${e.start_date}T${e.start_time}`,
       timezone: e.timezone, hide_start_date: !!e.hide_start_date,
