@@ -105,19 +105,25 @@
     return row;
   }
 
-  /* ---------- 3. Video embed on demand (no autoplay, no third-party load until clicked) ---------- */
-  document.querySelectorAll('.video[data-youtube]').forEach(function (box) {
-    var id = box.getAttribute('data-youtube');
+  /* ---------- 3. Local video on demand (keep the poster until clicked) ---------- */
+  document.querySelectorAll('.video[data-video]').forEach(function (box) {
+    var source = box.getAttribute('data-video');
     var btn = box.querySelector('.video__play');
-    if (!id || !btn) return;
+    if (!source || !btn) return;
     btn.addEventListener('click', function (e) {
       e.preventDefault();
-      var iframe = document.createElement('iframe');
-      iframe.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(id) + '?autoplay=1&rel=0';
-      iframe.title = btn.getAttribute('aria-label') || 'Video';
-      iframe.allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture';
-      iframe.allowFullscreen = true;
-      box.appendChild(iframe);
+      var url;
+      try { url = new URL(source, window.location.href); } catch (_) { return; }
+      if (url.origin !== window.location.origin || !url.pathname.startsWith('/video/') || !url.pathname.toLowerCase().endsWith('.mp4')) return;
+      var video = document.createElement('video');
+      video.src = url.href;
+      video.controls = true;
+      video.autoplay = true;
+      video.playsInline = true;
+      video.preload = 'metadata';
+      video.setAttribute('aria-label', btn.getAttribute('aria-label') || 'Video');
+      box.appendChild(video);
+      video.play().catch(function () {});
     });
   });
 

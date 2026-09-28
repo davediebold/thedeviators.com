@@ -47,6 +47,8 @@ Run `node tools/sync-eventbrite.cjs` to refresh locally, and `node --test tools/
 
 The homepage uses SoundCloud's hosted player for Creatures_Edit. SoundCloud provides the audio and player details live. The track must remain available with embedding enabled; the supplied track link is visible in the website source when published.
 
+The Live at The Grand Social video is served from `docs/video/PXL_20260531_165818210.mp4`, with its original retained in `source-assets/videos/`. The homepage and Live page keep their existing poster images and load the video only after the play button is pressed.
+
 The original Eventbrite server proxy is retained for backup but is not used. Netlify redirects and response headers do not apply on Pages.
 
 Remaining content work is listed in `project-notes/CONTENT-CHECKLIST.md`. Archived checklists describe the original build and are not current deployment instructions.
