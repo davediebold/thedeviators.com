@@ -22,4 +22,14 @@ Full collection: https://drive.google.com/drive/folders/1zKCaB7gmkiNZi_XKCNw8gsH
 - Deviators-166.jpg — https://drive.google.com/file/d/15n_OdWNoJjWCQ7wdAIRfdkVSjk2lo5Nk/view?usp=drivesdk
 - Deviators-83.jpg — https://drive.google.com/file/d/1LDJt0hQ5PLILD-uQQviHSR3v_6G_KFnz/view?usp=drivesdk
 
-The May 31 poster is for a past show. The EPK is a draft dated August 2026. Website email notes and single-launch details are saved separately. Existing local photographs were preserved.
+## Member history photographs
+
+Supplied directly by Dave Diebold on 29 September 2026 for the “Where they’ve come from” EPK and website section.
+
+- `bitzy-band-guitar-vox.jpg`
+- `bren-band-bass.jpg`
+- `andy-band-drums.jpg`
+
+Colour originals are preserved in `source-assets/photos/Member history/`. The monochrome website and EPK copies are in `docs/img/` with `-mono` appended to each filename.
+
+The May 31 poster is for a past show. The original source EPK is dated August 2026; the current published revision is dated September 2026. Website email notes and single-launch details are saved separately. Existing local photographs were preserved.
