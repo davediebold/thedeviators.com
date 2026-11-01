@@ -1,6 +1,6 @@
 {
   "source": "https://www.eventbrite.ie/o/120962217576",
-  "fetched_at": "2026-10-31T12:39:35.954Z",
+  "fetched_at": "2026-11-01T13:30:25.348Z",
   "refresh_interval": "daily",
   "events": [
     {
@@ -14,7 +14,7 @@
       "price": "From €15",
       "image": "https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F1192402357%2F2991057314192%2F1%2Foriginal.20260901-184257?crop=focalpoint&fit=crop&h=230&w=460&auto=format%2Ccompress&q=75&sharp=10&fp-x=0.498&fp-y=0.162&s=1d7daf9ca8443b2083e03e04c8e4f520",
       "url": "https://www.eventbrite.ie/e/the-deviators-digital-single-launch-tickets-1999410733326",
-      "sold_out": false
+      "sold_out": true
     }
   ]
 }
