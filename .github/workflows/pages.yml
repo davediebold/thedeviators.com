@@ -47,6 +47,10 @@ jobs:
             git commit -m 'Refresh public Eventbrite events'
             git push origin HEAD:main
           fi
+      - name: Build current EPK PDF
+        run: |
+          python -m pip install reportlab
+          python tools/build-epk-nov.py
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:
